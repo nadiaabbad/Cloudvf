@@ -9,39 +9,34 @@
     <h1>Mon Album</h1>
 
     <?php
-    require_once 'config.php';  // Inclure le fichier de configuration
+    require_once 'config.php';  // Include the configuration file
 
-    // Répertoire où les images seront stockées
     $imageDirectory = 'uploads/';
 
-    // Vérifie si le dossier existe, sinon le crée
+    // Check if the folder exists, otherwise create it
     if (!file_exists($imageDirectory)) {
         mkdir($imageDirectory, 0777, true);
     }
 
-    // Traitement du téléchargement de l'image
+    // Image upload processing
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
         $targetFile = $imageDirectory . basename($_FILES['image']['name']);
         
-        // Vérifie si le fichier est une image
+        // Check if the file is an image
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
 
         if (in_array($imageFileType, $allowedExtensions)) {
             if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-                // Enregistrez le chemin de l'image et les tags dans la base de données
+                // Save the image path and tags in the database
                 $fileName = $_FILES['image']['name'];
-                $tags = 'chat';  // Tag par défaut
 
-                // Utilisation de paramètres sécurisés
-                $insertQuery = "INSERT INTO MaTable (FileName, Tag) VALUES (?, ?)";
-                $params = array($fileName, $tags);
-                $stmt = sqlsrv_prepare($conn, $insertQuery, $params);
+                // ... Your existing code to save file name and default tag in the database ...
 
-                if (sqlsrv_execute($stmt) === false) {
-                    die(print_r(sqlsrv_errors(), true));
-                }
-
+                // Azure Custom Vision integration
+                include 'custom_vision_integration.php';  // Include the code for Azure Custom Vision
+                perform_custom_vision_integration($targetFile);
+                
                 echo '<p>L\'image a été téléchargée avec succès.</p>';
             } else {
                 echo '<p>Une erreur s\'est produite lors du téléchargement de l\'image.</p>';
@@ -52,18 +47,18 @@
     }
     ?>
 
-    <!-- Formulaire pour télécharger une image -->
+    <!-- Image upload form -->
     <form action="" method="post" enctype="multipart/form-data">
         <label for="image">Sélectionnez une image à télécharger :</label>
         <input type="file" name="image" id="image" accept="image/*" required>
         <button type="submit">Télécharger</button>
     </form>
 
-    <!-- Affichage de l'album -->
+    <!-- Display the album -->
     <h2>Album</h2>
     <div>
         <?php
-        // Affiche toutes les images dans le répertoire
+        // Display all images in the directory
         $images = glob($imageDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
         foreach ($images as $image) {
             echo '<img src="' . $image . '" alt="Album Image">';
@@ -71,9 +66,8 @@
         ?>
     </div>
 
-    <!-- Test de la connexion à la base de données -->
+    <!-- Test the database connection -->
     <?php
-    // Requête de test
     $query = "SELECT TOP 1 Id, FileName, Tag FROM MaTable";
     $result = sqlsrv_query($conn, $query);
 
@@ -81,7 +75,6 @@
         die(print_r(sqlsrv_errors(), true));
     }
 
-    // Affichage des résultats de test
     while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
         echo '<p>ID: ' . $row['Id'] . ', FileName: ' . $row['FileName'] . ', Tag: ' . $row['Tag'] . '</p>';
     }
