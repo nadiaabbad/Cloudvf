@@ -4,7 +4,7 @@ function perform_custom_vision_integration($imagePath) {
     // Azure Custom Vision settings
     $predictionKey = 'c6632ed3988e4f46949e921bfc539b75';
     $endpoint = 'https://westeurope.api.cognitive.microsoft.com/';
-    $iterationId = '/subscriptions/f2730c77-6230-4885-b050-4c5f383f05bc/resourceGroups/Projetfinal/providers/Microsoft.CognitiveServices/accounts/cloud_project';
+    $iterationId = '95145b0a-6dbf-461b-b026-fa927c57842e';
 
     // Prepare the image data for sending to Azure Custom Vision
     $imageData = file_get_contents($imagePath);
