@@ -45,6 +45,13 @@
             echo '<p>Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.</p>';
         }
     }
+
+    // Handle the form submission to refresh the page
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['refresh'])) {
+        // Redirect to the same page to refresh
+        header("Location: {$_SERVER['PHP_SELF']}");
+        exit;
+    }
     ?>
 
     <!-- Image upload form -->
@@ -52,6 +59,11 @@
         <label for="image">Sélectionnez une image à télécharger :</label>
         <input type="file" name="image" id="image" accept="image/*" required>
         <button type="submit">Télécharger</button>
+    </form>
+
+    <!-- Refresh button form -->
+    <form action="" method="post">
+        <button type="submit" name="refresh">Actualiser</button>
     </form>
 
     <!-- Display the album -->
