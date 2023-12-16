@@ -68,7 +68,7 @@
 
     <!-- Test the database connection -->
     <?php
-    $query = "SELECT TOP 1 Id, FileName, Tag FROM MaTable";
+    $query = "SELECT TOP Id, FileName, Tag FROM MaTable";
     $result = sqlsrv_query($conn, $query);
 
     if ($result === false) {
