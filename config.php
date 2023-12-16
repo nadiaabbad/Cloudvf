@@ -6,8 +6,7 @@ $connectionOptions = array(
     "PWD" => "123Klerviaadam",
     "MultipleActiveResultSets" => false,
     "Encrypt" => true,
-    "TrustServerCertificate" => false,
-    "ConnectionTimeout" => 30
+    "TrustServerCertificate" => false
 );
 
 // Établir la connexion à la base de données
