@@ -1,7 +1,7 @@
 <?php
 $serverName = "tcp:projetcloudvf.database.windows.net,1433";
 $connectionOptions = array(
-    "Database" => "projetcloudfinal",
+    "Database" => "projetcloudvf",
     "Uid" => "azureuser",
     "PWD" => "123Klerviaadam",
     "MultipleActiveResultSets" => false,
