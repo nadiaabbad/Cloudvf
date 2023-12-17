@@ -9,36 +9,37 @@
     <h1>Mon Album</h1>
 
     <?php
-    require_once 'config.php';  // Include the configuration file
+    require_once 'config.php';  // Inclure le fichier de configuration
 
-    // Directory where the images will be stored
+    // Répertoire où les images seront stockées
     $imageDirectory = 'uploads/';
 
-    // Check if the directory exists, create it if not
+    // Vérifie si le dossier existe, sinon le crée
     if (!file_exists($imageDirectory)) {
         mkdir($imageDirectory, 0777, true);
     }
 
-    // Image upload processing
+    // Traitement du téléchargement de l'image
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
         $targetFile = $imageDirectory . basename($_FILES['image']['name']);
         
-        // Check if the file is an image
+        // Vérifie si le fichier est une image
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
 
         if (in_array($imageFileType, $allowedExtensions)) {
             if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-                // Save the image path and tags in the database
+                // Enregistrez le chemin de l'image et les tags dans la base de données
                 $fileName = $_FILES['image']['name'];
 
                 // Call Custom Vision for image classification
                 $imagePath = $imageDirectory . $fileName;
-                $customVisionEndpoint = "https://projetcloudclass.cognitiveservices.azure.com/customvision/v3.0/Prediction/2b70f4fa-32ee-4597-b3c4-29588d7dc6d0/classify/iterations/2a3db157-b35c-4069-b1ac-7d9943764f4b/image";
-                $customVisionPredictionKey = "556885fbb73242b2b577ced53b0d4952";
+                $customVisionEndpoint = "https://predictiongitapp.cognitiveservices.azure.com/"; // Replace with your Custom Vision endpoint
+                $customVisionPredictionKey = "8b6ad715cd9344a8b1583de97f24c1ae"; // Replace with your Custom Vision prediction key
+                $customVisionIterationId = "057147e0-d1b2-4ed1-83a7-a798ecd772e2"; // Replace with your Custom Vision iteration ID
 
                 // Create a POST request to the Custom Vision prediction endpoint
-                $ch = curl_init($customVisionEndpoint);
+                $ch = curl_init($customVisionEndpoint . "/customvision/v3.0/Prediction/$customVisionIterationId/classify/iterations/Iteration1/image");
                 $imageData = file_get_contents($imagePath);
 
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -64,7 +65,7 @@
                 curl_close($ch);
 
                 // Continue with the database insertion
-                $insertQuery = "INSERT INTO MaTable (FileName, Tag) VALUES (?, ?)";
+                $insertQuery = "INSERT INTO Images (ImageName, Class) VALUES (?, ?)";
                 $params = array($fileName, $tags);
                 $stmt = sqlsrv_prepare($conn, $insertQuery, $params);
 
@@ -72,28 +73,28 @@
                     die(print_r(sqlsrv_errors(), true));
                 }
 
-                echo '<p>The image was uploaded and classified successfully.</p>';
+                echo '<p>L\'image a été téléchargée et classifiée avec succès.</p>';
             } else {
-                echo '<p>An error occurred while uploading the image.</p>';
+                echo '<p>Une erreur s\'est produite lors du téléchargement de l\'image.</p>';
             }
         } else {
-            echo '<p>Only JPG, JPEG, PNG, and GIF files are allowed.</p>';
+            echo '<p>Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.</p>';
         }
     }
     ?>
 
-    <!-- Form for uploading an image -->
+    <!-- Formulaire pour télécharger une image -->
     <form action="" method="post" enctype="multipart/form-data">
-        <label for="image">Select an image to upload:</label>
+        <label for="image">Sélectionnez une image à télécharger :</label>
         <input type="file" name="image" id="image" accept="image/*" required>
-        <button type="submit">Upload</button>
+        <button type="submit">Télécharger</button>
     </form>
 
-    <!-- Display the album -->
+    <!-- Affichage de l'album -->
     <h2>Album</h2>
     <div>
         <?php
-        // Display all images in the directory
+        // Affiche toutes les images dans le répertoire
         $images = glob($imageDirectory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
         foreach ($images as $image) {
             echo '<img src="' . $image . '" alt="Album Image">';
@@ -101,19 +102,19 @@
         ?>
     </div>
 
-    <!-- Test the database connection -->
+    <!-- Test de la connexion à la base de données -->
     <?php
-    // Test query
-    $query = "SELECT TOP 30 ImageID, FileName, Tag FROM MaTable";
+    // Requête de test
+    $query = "SELECT TOP 1 ImageID, ImageName, Class FROM Images";
     $result = sqlsrv_query($conn, $query);
 
     if ($result === false) {
         die(print_r(sqlsrv_errors(), true));
     }
 
-    // Display test results
+    // Affichage des résultats de test
     while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-        echo '<p>ImageID: ' . $row['ImageID'] . ', FileName: ' . $row['FileName'] . ', Tag: ' . $row['Tag'] . '</p>';
+        echo '<p>ImageID: ' . $row['ImageID'] . ', ImageName: ' . $row['ImageName'] . ', Class: ' . $row['Class'] . '</p>';
     }
     ?>
 </body>
