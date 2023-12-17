@@ -13,7 +13,7 @@ $connectionOptions = array(
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
 // Check the connection
-if ($conn === false) {
+if ($conn) {
     // Display a generic error message to the user
     die('Unable to connect to the database. Please try again later.');
 
