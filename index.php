@@ -34,12 +34,11 @@
 
                 // Call Custom Vision for image classification
                 $imagePath = $imageDirectory . $fileName;
-                $customVisionEndpoint = "https://projetcloudclass.cognitiveservices.azure.com/"; // Replace with your Custom Vision endpoint
-                $customVisionPredictionKey = "556885fbb73242b2b577ced53b0d4952"; // Replace with your Custom Vision prediction key
-                $customVisionIterationId = "9121e358-9377-47c7-a312-3f44aa69ddd7"; // Replace with your Custom Vision iteration ID
+                $customVisionEndpoint = "https://projetcloudclass.cognitiveservices.azure.com/customvision/v3.0/Prediction/2b70f4fa-32ee-4597-b3c4-29588d7dc6d0/classify/iterations/2a3db157-b35c-4069-b1ac-7d9943764f4b/image";
+                $customVisionPredictionKey = "556885fbb73242b2b577ced53b0d4952";
 
                 // Create a POST request to the Custom Vision prediction endpoint
-                $ch = curl_init($customVisionEndpoint . "/customvision/v3.0/Prediction/$customVisionIterationId/classify/iterations/Iteration1/image");
+                $ch = curl_init($customVisionEndpoint);
                 $imageData = file_get_contents($imagePath);
 
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -119,5 +118,3 @@
     ?>
 </body>
 </html>
-
- 
