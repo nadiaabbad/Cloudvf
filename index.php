@@ -35,23 +35,9 @@
 
 
 
-
-
-                
-                $tags = 'chat';  // Tag par défaut
-
-                // Utilisation de paramètres sécurisés
-                $insertQuery = "INSERT INTO MaTable (FileName, Tag) VALUES (?, ?)";
-                $params = array($fileName, $tags);
-                $stmt = sqlsrv_prepare($conn, $insertQuery, $params);
-
-                if (sqlsrv_execute($stmt) === false) {
-                    die(print_r(sqlsrv_errors(), true));
-                }
-
       // Call Custom Vision for image classification
                 $imagePath = $imageDirectory . $fileName;
-                $customVisionEndpoint = "https://westeurope.api.cognitive.microsoft.com/"; // Replace with your Custom Vision endpoint
+                $customVisionEndpoint = "https://projetcloudclass.cognitiveservices.azure.com/"; // Replace with your Custom Vision endpoint
                 $customVisionPredictionKey = "556885fbb73242b2b577ced53b0d4952"; // Replace with your Custom Vision prediction key
                 $customVisionIterationId = "9121e358-9377-47c7-a312-3f44aa69ddd7"; // Replace with your Custom Vision iteration ID
 
@@ -82,7 +68,7 @@
                 curl_close($ch);
 
                 // Continue with the database insertion
-                $insertQuery = "INSERT INTO Images (FileName, Tag) VALUES (?, ?)";
+                $insertQuery = "INSERT INTO MaTable (FileName, Tag) VALUES (?, ?)";
                 $params = array($fileName, $tags);
                 $stmt = sqlsrv_prepare($conn, $insertQuery, $params);
 
