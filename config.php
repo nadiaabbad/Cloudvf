@@ -18,13 +18,3 @@ if (!$conn) {
 }
 ?>
 
-
-
-
-
-
-
-    // For debugging purposes, you can uncomment the line below
-    // die(print_r(sqlsrv_errors(), true));
-}
-?>
