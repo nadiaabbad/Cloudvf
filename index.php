@@ -39,7 +39,7 @@
                 $imagePath = $imageDirectory . $fileName;
                 $customVisionEndpoint = "https://projetcloudclass.cognitiveservices.azure.com/"; // Replace with your Custom Vision endpoint
                 $customVisionPredictionKey = "556885fbb73242b2b577ced53b0d4952"; // Replace with your Custom Vision prediction key
-                $customVisionIterationId = "993b51a1-98b8-40a1-bf26-499df538ce31"; // Replace with your Custom Vision iteration ID
+                $customVisionIterationId = "9121e358-9377-47c7-a312-3f44aa69ddd7"; // Replace with your Custom Vision iteration ID
 
                 // Create a POST request to the Custom Vision prediction endpoint
                 $ch = curl_init($customVisionEndpoint . "/customvision/v3.0/Prediction/$customVisionIterationId/classify/iterations/Iteration1/image");
@@ -108,7 +108,7 @@
     <!-- Test de la connexion à la base de données -->
     <?php
     // Requête de test
-    $query = "SELECT TOP 1 Id, FileName, Tag FROM MaTable";
+    $query = "SELECT TOP 20 Id, FileName, Tag FROM MaTable";
     $result = sqlsrv_query($conn, $query);
 
     if ($result === false) {
