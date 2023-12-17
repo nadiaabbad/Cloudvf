@@ -9,11 +9,15 @@ $connectionOptions = array(
     "TrustServerCertificate" => false
 );
 
-// Établir la connexion à la base de données
+// Establish the database connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
-// Vérifier la connexion
-if (!$conn) {
-    die(print_r(sqlsrv_errors(), true));
+// Check the connection
+if ($conn === false) {
+    // Display a generic error message to the user
+    die('Unable to connect to the database. Please try again later.');
+
+    // For debugging purposes, you can uncomment the line below
+    // die(print_r(sqlsrv_errors(), true));
 }
 ?>
