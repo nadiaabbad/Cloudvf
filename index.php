@@ -108,7 +108,7 @@
     <!-- Test de la connexion à la base de données -->
     <?php
     // Requête de test
-    $query = "SELECT TOP 20 Id, FileName, Tag FROM MaTable";
+    $query = "SELECT TOP 20 ImageId, FileName, Tag FROM MaTable";
     $result = sqlsrv_query($conn, $query);
 
     if ($result === false) {
@@ -117,7 +117,7 @@
 
     // Affichage des résultats de test
     while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-        echo '<p>ID: ' . $row['Id'] . ', FileName: ' . $row['FileName'] . ', Tag: ' . $row['Tag'] . '</p>';
+        echo '<p>ImageID: ' . $row['ImageId'] . ', FileName: ' . $row['FileName'] . ', Tag: ' . $row['Tag'] . '</p>';
     }
     ?>
 </body>
