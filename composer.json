@@ -1,7 +1,1 @@
-json
-{
-    "require": {
-        "microsoft/azure-storage-blob": "^1.0"
-    }
-}
 
